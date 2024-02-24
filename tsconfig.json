@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "target": "ES2022",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "outDir": "./dist",
+        "resolveJsonModule": true,
+        /* Strict Type-Checking Options */
+        "strictNullChecks": true,
+
+        /* Additional Checks */
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+
+        /* Debugging Options */
+        "traceResolution": false,
+        "listEmittedFiles": false,
+        "listFiles": false,
+        "allowJs": true,
+        "pretty": true,
+        "maxNodeModuleJsDepth": 10
+    },
+    "include": ["**/*.ts", "**/*.d.ts", "schemaGenerator.js"],
+    "exclude": ["node_modules"],
+    "ts-node": { "files": true }
+}

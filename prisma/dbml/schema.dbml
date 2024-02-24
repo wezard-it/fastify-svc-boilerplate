@@ -1,0 +1,18 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  role Role [not null]
+  email String [unique, not null]
+  name String [not null]
+  surname String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+}
+
+Enum Role {
+  USER
+  ADMIN
+}
