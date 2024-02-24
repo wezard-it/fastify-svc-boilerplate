@@ -15,13 +15,13 @@ COPY ./prisma ./prisma
 # COPY ./.env ./
 
 # Install the application's dependencies
-RUN npm install
-RUN npm run schema:generate
-RUN npm run prisma:generate
-RUN npm run build
+RUN yarn install
+RUN yarn run schema:generate
+RUN yarn run prisma:generate
+RUN yarn run build
 
 # Expose the port on which the application will run
 EXPOSE 3000
 
 # Start the application
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
