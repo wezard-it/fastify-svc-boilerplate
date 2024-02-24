@@ -15,7 +15,8 @@
     "commit": "npx git-cz",
     "prepare": "husky install",
     "schema": "node schemaGenerator.js",
-    "test": "jest -i"
+    "test": "jest -i",
+    "plugin": "./plugin-generator.sh"
   },
   "keywords": [
     "wezard-svc"

@@ -27,6 +27,6 @@
         "maxNodeModuleJsDepth": 10
     },
     "include": ["**/*.ts", "**/*.d.ts", "schemaGenerator.js", "jest.config.ts", "tests/**/*.ts"],
-    "exclude": ["node_modules"],
+    "exclude": ["node_modules", "pluginTemplate"],
     "ts-node": { "files": true }
 }
