@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Chiedi all'utente il nome del plugin
-echo "Inserisci il nome del plugin (plurale):"
+echo "Inserisci il nome del plugin:"
 read pluginName
 
 # Crea la directory di destinazione se non esiste
