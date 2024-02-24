@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const tjs = require('typescript-json-schema')
 
 const fs = require('fs')

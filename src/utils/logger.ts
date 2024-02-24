@@ -8,10 +8,9 @@ import config from '../config/server.config'
 // import { Logtail } from '@logtail/node'
 // import Sentry from 'winston-transport-sentry-node'
 
-// Configurazione dei trasporti del logger
 const transports: Transport[] = []
 
-// Console Transport
+// CONSOLE TRANSPORT
 function transform(info: any) {
     const args = info[Symbol.for('splat')]
     if (args) {
@@ -58,7 +57,7 @@ if (config.env === 'production') {
 }
 */
 
-// Configurazione del logger Winston
+// WINSTON LOGGER
 const logger = winston.createLogger({
     level: config.logLevel,
     format: format.combine(
