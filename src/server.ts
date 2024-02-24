@@ -93,7 +93,7 @@ const getServer = async (): Promise<FastifyInstance> => {
     })
 
     /** Mount error handler */
-    server.setErrorHandler(WezardErrorHandler(config))
+    server.setErrorHandler(WezardErrorHandler())
 
     server.setNotFoundHandler(() => {
         throw WezardError.fromDef(APIErrors.APINotFound)
