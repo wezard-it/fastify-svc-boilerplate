@@ -51,7 +51,7 @@ The `hooks` folder contains predefined Fastify server hooks to decorate and enri
 -   `WezardErrorHandler.ts` defines error management and logging. It handles all responses in case an error occurs.
 -   `WezardReqInitializer.ts` sets the logger for the request and logs the initial message.
 -   `WezardResponseLogger.ts` logs the final request message.
--   `authentication.ts` contains authentication functions to use in `.routes.ts` plugin files. E.g., `instance.post('/login', { preHandler: [authFirebase], schema: { body: _schema.LoginBody } }, authController.login)`. Here, you can add different authentication functions (e.g., admin, user, internal, etc.).
+-   `authentication` folder contains authentication functions to use in `.routes.ts` plugin files. E.g., `instance.post('/login', { preHandler: [authToken], schema: { body: _schema.LoginBody } }, authController.login)`. Here you can define different kind of authentication (eg: authToken) and for each of them define their implementation (eg: `firebase-auth.ts`)
 
 ## Prisma
 
@@ -72,8 +72,8 @@ In the `src/utils` folder, you can also
 find:
 
 -   Firebase notification utility (sends notifications given device tokens, and notification title and message).
--   Storage utility (compatible with Google Cloud Storage).
--   Mail utility (compatible with SendGrid and MailJet).
+-   Storage utility (standard implementation is with Google Cloud Storage).
+-   Mail utility (standard implementations are with SendGrid and MailJet).
 -   Definition of Wezard Error, used whenever an error needs to be thrown. You can throw it in two different ways:
     -   `throw WezardError.fromDef(APIErrors.InvalidToken)`, in this case, you are using a predefined error from the `consts.ts` file.
     -   `throw new WezardError("message", 500, "GENERIC_CODE", {"data": "error data"}, previousError, isVisible)`, in this case, you are constructing a new error. Follow the documentation in `WezardError.ts` to understand how to use the input parameters.

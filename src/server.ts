@@ -1,7 +1,6 @@
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
-import { auth } from 'firebase-admin'
 import winston from 'winston'
 import fastifyRequestContextPlugin from '@fastify/request-context'
 import multipart from '@fastify/multipart'
@@ -26,16 +25,9 @@ const server: FastifyInstance = Fastify({
 
 declare module 'fastify' {
     interface FastifyRequest {
-        user: {
-            id: string
-            phone: string
-        }
+        user: TokenDecoded
         admin?: boolean
-        user_firebase?: auth.DecodedIdToken
         logger: winston.Logger
-        partner?: {
-            id: string
-        }
     }
 
     interface FastifyReply {
