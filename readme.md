@@ -14,9 +14,10 @@ This document describes the various scripts included in the `package.json` of th
 -   `typecheck`: Runs the TypeScript compiler to check types without generating JavaScript files.
 -   `commit`: Facilitates conventional commits using the interactive `git-cz` CLI tool.
 -   `prepare`: Sets up Husky for managing Git hooks.
--   `schema`: Executes a custom script (`schemaGenerator.js`) to generate schema-related artifacts. It generates a TypeScript schema from `.types.ts` files in the `src` directory using `typescript-json-schema`, outputting to `_schema.ts`. This final file can be used for validation in `.routes.ts` files.
 -   `test`: Runs tests using Jest in isolated environments.
--   `plugin`: Executes a custom shell script (`plugin-generator.sh`) to generate boilerplate code for new plugins, including necessary files and directories based on a template. It requires the plugin name as input (e.g., user) and generates files and folders in the `src/plugins` directory.
+-   `plugin:generate`: Executes a custom js script (`wezard-scripts/plugin-generator/index.js`) to generate boilerplate code for new plugins, including necessary files and directories based on a template. It requires the plugin name as second paramater (e.g., user) and generates files and folders in the `src/plugins` directory.
+-   `schema:generate`: Executes a custom script (`wezard-scripts/schema-generator/index.js`) to generate schema-related artifacts. It generates a TypeScript schema from `.types.ts` files in the `src` directory using `typescript-json-schema`, outputting to `_schema.ts`. This final file can be used for validation in `.routes.ts` files.
+-   `prisma:generate`: generate Prisma types
 
 ## Plugin Structure
 

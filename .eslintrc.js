@@ -25,7 +25,7 @@ module.exports = {
         browser: true,
         serviceworker: true
     },
-    ignorePatterns: ['dist', 'generated', '*.js', '*.config.js', 'node_modules', 'utils', 'pluginTemplate'],
+    ignorePatterns: ['dist', 'generated', '*.js', '*.config.js', 'node_modules', 'utils', 'wezard-scripts'],
     rules: {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-use-before-define': 'warn',

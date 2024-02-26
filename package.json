@@ -14,9 +14,10 @@
     "typecheck": "tsc --extendedDiagnostics --noEmit --project .",
     "commit": "npx git-cz",
     "prepare": "husky install",
-    "schema": "node schemaGenerator.js",
     "test": "jest -i",
-    "plugin": "./plugin-generator.sh"
+    "plugin:generate": "node wezard-scripts/plugin-generator/index.js",
+    "schema:generate": "node wezard-scripts/schema-generator/index.js",
+    "prisma:generate": "prisma generate"
   },
   "keywords": [
     "wezard-svc"
