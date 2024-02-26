@@ -19,6 +19,9 @@ export type Config = {
         googleProjectId?: string
         googleStorageBucket?: string
     }
+    email: {
+        defaultSender: string
+    }
 }
 
 // define validation for all the env variables
@@ -35,7 +38,8 @@ const envSchema = joi
         DATABASE_URL: joi.string().required(),
         SERVER_URL: joi.string().required(),
         GOOGLE_PROJECT_ID: joi.string(),
-        GOOGLE_STORAGE_BUCKET: joi.string()
+        GOOGLE_STORAGE_BUCKET: joi.string(),
+        EMAIL_DEFAULT_SENDER: joi.string().required()
     })
     .unknown()
     .required()
@@ -60,6 +64,9 @@ const config: Config = {
     fullResponse: envVars.FULL_RESPONSE,
     databaseUrl: envVars.DATABASE_URL,
     serverUrl: envVars.SERVER_URL,
+    email: {
+        defaultSender: envVars.EMAIL_DEFAULT_SENDER
+    },
     google: {
         googleProjectId: envVars.GOOGLE_PROJECT_ID,
         googleStorageBucket: envVars.GOOGLE_PROJECT_BUCKET

@@ -4,8 +4,8 @@ import { User } from '@prisma/client'
 import { auth } from '../src/utils/firebase'
 import db from '../src/utils/db'
 import config from '../src/config/server.config'
-import { deleteFile } from '../src/utils/storage'
 import getServer from '../src/server'
+import storage from '../src/utils/storage'
 
 describe('Users tests', () => {
     let app: FastifyInstance
@@ -59,7 +59,7 @@ describe('Users tests', () => {
                 where: { email: 'email@prova.com' }
             })
 
-            await deleteFile(`profile_pictures/${userDb.id}.png`)
+            await storage.deleteFile(`profile_pictures/${userDb.id}.png`)
         }
 
         await app.close()
