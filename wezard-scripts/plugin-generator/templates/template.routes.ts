@@ -2,7 +2,7 @@ import { type FastifyPluginCallback } from 'fastify'
 import templateController from './templates.controller'
 
 const templateRoutes: FastifyPluginCallback = (fastify, _opts, done) => {
-    fastify.get('/', {}, templateController.index)
+    fastify.get('/', {}, templateController.list)
 
     fastify.get('/:templateId', {}, templateController.show)
 

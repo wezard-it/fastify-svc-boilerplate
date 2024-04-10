@@ -1,7 +1,7 @@
 import { type Template } from '@prisma/client'
 import db from '../../utils/db'
 
-async function index(): Promise<Template[]> {
+async function list(): Promise<Template[]> {
     return db.template.findMany()
 }
 
@@ -37,7 +37,7 @@ async function destroy(id: string): Promise<Template> {
 }
 
 export default {
-    index,
+    list,
     store,
     show,
     update,

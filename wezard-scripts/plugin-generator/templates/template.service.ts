@@ -3,8 +3,8 @@ import { type Template } from '@prisma/client'
 import WezardError from '../../utils/WezardError'
 import { APIErrors } from '../../utils/consts'
 
-async function index(): Promise<Template[]> {
-    return await templateRepository.index()
+async function list(): Promise<Template[]> {
+    return await templateRepository.list()
 }
 
 async function store(template: any): Promise<Template> {
@@ -30,7 +30,7 @@ async function destroy(id: string): Promise<Template> {
 }
 
 export default {
-    index,
+    list,
     store,
     get,
     update,
