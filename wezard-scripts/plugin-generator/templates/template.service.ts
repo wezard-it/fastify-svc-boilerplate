@@ -11,7 +11,7 @@ async function store(template: any): Promise<Template> {
     return templateRepository.store(template)
 }
 
-async function get(id: string): Promise<Template | null> {
+async function show(id: string): Promise<Template | null> {
     const template = await templateRepository.show(id)
 
     if (!template) {
@@ -32,7 +32,7 @@ async function destroy(id: string): Promise<Template> {
 export default {
     list,
     store,
-    get,
+    show,
     update,
     destroy
 }
