@@ -17,7 +17,8 @@
     "test": "jest -i",
     "plugin:generate": "node wezard-scripts/plugin-generator/index.js",
     "schema:generate": "node wezard-scripts/schema-generator/index.js",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "database:seed": "node wezard-scripts/seed-database/index.js"
   },
   "keywords": [
     "wezard-svc"
@@ -59,6 +60,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@fastify/cors": "^8.2.1",
     "@fastify/helmet": "^10.1.0",
     "@fastify/multipart": "^7.6.0",
