@@ -17,7 +17,14 @@ const WezardErrorHandler = () => (err: WezardError, req: FastifyRequest, reply: 
         if (!(err instanceof WezardError)) {
             if ((err as FastifyError).validation) {
                 const errValidation = err as FastifyError
-                newErr = new WezardError(errValidation.message, 400, 'VALIDATION_ERROR', NA, NA, true)
+                newErr = new WezardError(
+                    'Validation error',
+                    400,
+                    'VALIDATION_ERROR',
+                    errValidation.validation,
+                    NA,
+                    true
+                )
             } else {
                 newErr = new WezardError(NA, NA, NA, NA, err, true)
             }
@@ -43,7 +50,7 @@ const WezardErrorHandler = () => (err: WezardError, req: FastifyRequest, reply: 
         console.log('---------------------------------')
     }
 
-    return reply.wezardError(reply, err)
+    return reply.wezardError(reply, newErr)
 }
 
 export default WezardErrorHandler
