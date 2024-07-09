@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
 // CONSOLE TRANSPORT
 function transform(info: any) {
     const args = info[Symbol.for('splat')]
-    if (args) {
+    if (args && process.env.NODE_ENV === 'development') {
         info.message = util.format(info.message, ...args)
     }
     if (!info.requestId) info.requestId = requestContext.get('requestId') || 'system'
