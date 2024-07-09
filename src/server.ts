@@ -70,7 +70,7 @@ const getServer = async (): Promise<FastifyInstance> => {
     server.decorateReply('wezardSuccess', success)
     server.decorateReply('wezardError', error)
 
-    server.addHook('preHandler', WezardReqInitializer())
+    server.addHook('preValidation', WezardReqInitializer())
     server.addHook('onResponse', WezardResponeLogger())
 
     await server.register(multipart, {

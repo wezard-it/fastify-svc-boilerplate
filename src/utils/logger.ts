@@ -9,6 +9,21 @@ import config from '../config/server.config'
 // import Sentry from 'winston-transport-sentry-node'
 
 const transports: Transport[] = []
+let formats = []
+
+if (process.env.NODE_ENV === 'development') {
+    formats.push(
+        format.printf(
+            ({ severity, message, label, timestamp, stack, requestId }) =>
+                `${timestamp} [${label || '-'}] ${requestId || 'system'} ${severity}: ${message} ${stack || ''}`
+        )
+    ),
+        formats.push(
+            format.colorize({
+                all: true
+            })
+        )
+}
 
 // CONSOLE TRANSPORT
 function transform(info: any) {
@@ -26,15 +41,7 @@ function utilFormatter() {
 
 transports.push(
     new winston.transports.Console({
-        format: format.combine(
-            format.printf(
-                ({ level, message, label, timestamp, stack, requestId }) =>
-                    `${timestamp} [${label || '-'}] ${requestId || 'system'} ${level}: ${message} ${stack || ''}`
-            ),
-            format.colorize({
-                all: true
-            })
-        )
+        format: format.combine(...formats)
     })
 )
 
@@ -61,13 +68,21 @@ if (config.env === 'production') {
 const logger = winston.createLogger({
     level: config.logLevel,
     format: format.combine(
-        format.json(),
+        format((info) => {
+            let level = info.level.toUpperCase()
+            if (level === 'VERBOSE') {
+                level = 'DEBUG'
+            }
+            info['severity'] = level
+            return info
+        })(),
         format.errors({
             stack: true
         }),
         format.label({ label: config.serviceName }),
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        utilFormatter()
+        utilFormatter(),
+        format.json()
     ),
     defaultMeta: { service: config.serviceName },
     transports
