@@ -16,8 +16,8 @@ COPY ./prisma ./prisma
 
 # Install the application's dependencies
 RUN yarn install
-RUN yarn run schema:generate
 RUN yarn run prisma:generate
+RUN yarn run schema:generate
 RUN yarn run build
 
 # Expose the port on which the application will run
