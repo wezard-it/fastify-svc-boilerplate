@@ -16,7 +16,7 @@ This document describes the various scripts included in the `package.json` of th
 -   `prepare`: Sets up Husky for managing Git hooks.
 -   `test`: Runs tests using Jest in isolated environments.
 -   `plugin:generate`: Executes a custom js script (`wezard-scripts/plugin-generator/index.js`) to generate boilerplate code for new plugins, including necessary files and directories based on a template. It requires the plugin name as second paramater (e.g., user) and generates files and folders in the `src/plugins` directory.
--   `schema:generate`: Executes a custom script (`wezard-scripts/schema-generator/index.js`) to generate schema-related artifacts. It generates a TypeScript schema from `.types.ts` files in the `src` directory using `typescript-json-schema`, outputting to `_schema.ts`. This final file can be used for validation in `.routes.ts` files.
+-   `schema:generate`: Executes a custom script (`wezard-scripts/schema-generator/index.js`) to generate schema-related artifacts. It generates a TypeScript schema from `.types.ts` files in the `src` directory using `typescript-json-schema`, outputting to `_schema.ts`. This final file can be used for validation in `.routes.ts` files. For typescript annotations see [this doc](https://github.com/YousefED/typescript-json-schema/blob/master/api.md)
 -   `prisma:generate`: generate Prisma types
 
 ## Plugin Structure
