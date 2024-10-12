@@ -4,13 +4,15 @@ FROM node:20
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and yarn.lock to the working directory
 COPY package*.json ./
+COPY ./yarn.lock ./
 
 # Copy the rest of the application code to the working directory
 COPY ./src ./src
-COPY ./schemaGenerator.js ./
+COPY ./wezard-scripts ./wezard-scripts
 COPY ./tsconfig.json ./
+COPY ./index.ts ./
 COPY ./prisma ./prisma
 # COPY ./.env ./
 
