@@ -30,16 +30,15 @@ const WezardErrorHandler = () => (err: WezardError, req: FastifyRequest, reply: 
             }
         }
 
-        if (!req.headers['user-agent']?.includes('Contact research@pdrlabs.net'))
-            req.logger.error(newErr.message, {
-                extra: {
-                    authorization: req.headers.authorization || 'NA',
-                    history: err.history || 'NA',
-                    body: req.body || {},
-                    url: `${req.method} -> ${req.url}`
-                },
-                error: err
-            })
+        req.logger.error(newErr.message, {
+            extra: {
+                authorization: req.headers.authorization || 'NA',
+                history: err.history || 'NA',
+                body: req.body || {},
+                url: `${req.method} -> ${req.url}`
+            },
+            error: err
+        })
     } catch (e) {
         console.error('---------------- ERROR ----------------')
         console.log(`${req.method} -> ${req.url}`)

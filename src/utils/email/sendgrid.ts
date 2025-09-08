@@ -1,8 +1,13 @@
 import sendgrid from '@sendgrid/mail'
 import config from '../../config/server.config'
 import { EmailDefaultData } from '.'
+import logger from '../logger'
 
-sendgrid.setApiKey(config.sendgrid.sendgrid_key)
+if (config.sendgrid.sendgrid_key) {
+    sendgrid.setApiKey(config.sendgrid.sendgrid_key)
+} else {
+    logger.warn('Sendgrid API key not found. Please set SENDGRID_API_KEY environment variable.')
+}
 
 const sendWithSendgrid = async (templateId: string, emailInfo: EmailDefaultData, templateData?: object) => {
     if (templateId === 'NULL')

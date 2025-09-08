@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+ 
 const GENERIC_ERROR_CODE = 'GENERIC_ERROR'
 
 /**

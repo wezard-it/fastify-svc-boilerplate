@@ -27,7 +27,7 @@ function getPublicUrl(fileName: string): string {
 
 async function getSignedUrl(fileName: string): Promise<string> {
     try {
-        if (storage.getSignedUrl) return storage.getSignedUrl(fileName)
+        if (storage.getSignedUrl) return await storage.getSignedUrl(fileName)
         else {
             throw new Error('Get signed url function is not defined')
         }
@@ -43,7 +43,7 @@ async function getSignedUrl(fileName: string): Promise<string> {
 
 async function uploadLocalFile(filePath: string, destination: string): Promise<void> {
     try {
-        if (storage.uploadLocalFile) return storage.uploadLocalFile(filePath, destination)
+        if (storage.uploadLocalFile) return await storage.uploadLocalFile(filePath, destination)
         else {
             throw new Error('Upload local file function is not defined')
         }
@@ -59,7 +59,7 @@ async function uploadLocalFile(filePath: string, destination: string): Promise<v
 
 async function deleteFile(fileName: string) {
     try {
-        return storage.deleteFile(fileName)
+        return await storage.deleteFile(fileName)
     } catch (e) {
         logger.error('Error in deleting file', {
             extra: {
@@ -72,7 +72,7 @@ async function deleteFile(fileName: string) {
 
 async function uploadBuffer(buffer: Buffer, destination: string): Promise<string> {
     try {
-        return storage.uploadBuffer(buffer, destination)
+        return await storage.uploadBuffer(buffer, destination)
     } catch (e) {
         logger.error('Error in uploading buffer', {
             extra: {

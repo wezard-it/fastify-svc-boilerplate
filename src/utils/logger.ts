@@ -9,10 +9,10 @@ import config from '../config/server.config'
 // import Sentry from 'winston-transport-sentry-node'
 
 const transports: Transport[] = []
-let formats = []
+const formats = []
 
 if (process.env.NODE_ENV === 'development') {
-    formats.push(
+    ;(formats.push(
         format.printf(
             ({ severity, message, label, timestamp, stack, requestId }) =>
                 `${timestamp} [${label || '-'}] ${requestId || 'system'} ${severity}: ${message} ${stack || ''}`
@@ -22,12 +22,12 @@ if (process.env.NODE_ENV === 'development') {
             format.colorize({
                 all: true
             })
-        )
+        ))
 }
 
 // CONSOLE TRANSPORT
-function transform(info: any) {
-    const args = info[Symbol.for('splat')]
+function transform(info: winston.Logform.TransformableInfo) {
+    const args = info[Symbol.for('splat')] as unknown[]
     if (args && process.env.NODE_ENV === 'development') {
         info.message = util.format(info.message, ...args)
     }

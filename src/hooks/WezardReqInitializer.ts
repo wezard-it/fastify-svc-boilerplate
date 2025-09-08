@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify'
 import { requestContext } from '@fastify/request-context'
 import WezardError from '../utils/WezardError'
@@ -23,13 +22,11 @@ const WezardReqInitializer = () => (req: FastifyRequest, reply: FastifyReply, do
             body: req.body
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         req.logger = logger.child({ requestId: req.id })
 
         requestContext.set('requestId', req.id || 'system')
 
-        if (req.url !== '/' && !req.headers['user-agent']?.includes('Contact research@pdrlabs.net'))
-            req.logger.info(`START ----- ${req.method} -> ${req.url}`, { extra })
+        req.logger.info(`START ----- ${req.method} -> ${req.url}`, { extra })
 
         return done()
     } catch (e) {

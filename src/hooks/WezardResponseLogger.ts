@@ -9,8 +9,7 @@ const NA = undefined
  */
 const WezardResponeLogger = () => (req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
     try {
-        if (req.url !== '/')
-            req.logger.info(`END ----- ${req.method} -> ${req.url} : ${Math.round(Date.now() - reply.startTime)} ms`)
+        req.logger.info(`END ----- ${req.method} -> ${req.url} : ${Math.round(Date.now() - reply.startTime)} ms`)
         return done()
     } catch (e) {
         return done(new WezardError('Request initialization error', 500, NA, NA, e as WezardError, false))

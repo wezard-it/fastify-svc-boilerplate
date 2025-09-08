@@ -28,7 +28,7 @@ export const sendEmail = async (
                 templateData
             }
         })
-    } catch (e) {
+    } catch (_e) {
         logger.error('Error in sending email', {
             extra: {
                 emailInfo,

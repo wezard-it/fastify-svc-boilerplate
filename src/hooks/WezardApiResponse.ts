@@ -5,7 +5,6 @@ import config from '../config/server.config'
 
 const GENERIC_SUCCESS_STATUS = 'GENERIC_SUCCESS'
 const SUCCESS_CODE = 'SUCCESS'
-const STATUS_ERROR = 'ERROR'
 const NA = undefined
 
 const buildFullErrorResponse = (wezardError: WezardError) => {
@@ -13,7 +12,7 @@ const buildFullErrorResponse = (wezardError: WezardError) => {
 
     return {
         message: wezardError.message,
-        status: STATUS_ERROR,
+        status: wezardError.status,
         code: wezardError.code,
         data: wezardError.data,
         visible: wezardError.visible,
@@ -37,7 +36,7 @@ const buildRestrictedErrorResponse = (wezardError: WezardError) => {
 
     return {
         message: firstError.message,
-        status: STATUS_ERROR,
+        status: firstError.status,
         code: firstError.code,
         data: firstError.data,
         message_history: historyString

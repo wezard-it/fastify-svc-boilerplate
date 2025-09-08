@@ -20,11 +20,12 @@ const main = async () => {
             await db.$disconnect()
         })
 
+        // use only in case of single instance or in development
         await server.register(fastifyCron, {
             jobs: [
                 {
                     cronTime: '0 * * * *', // Everyhour
-                    onTick: () => console.log('Internal cronjob'),
+                    onTick: () => logger.info('Internal cronjob'),
                     startWhenReady: true
                 }
             ]

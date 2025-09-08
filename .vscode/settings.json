@@ -1,0 +1,36 @@
+{
+    "eslint.enable": true,
+    "eslint.validate": ["javascript", "typescript"],
+    "eslint.workingDirectories": ["."],
+    "eslint.format.enable": false,
+    "eslint.codeActionsOnSave.mode": "problems",
+    "eslint.codeActionsOnSave.rules": ["no-unused-vars", "@typescript-eslint/no-unused-vars"],
+
+    "prettier.enable": true,
+    "prettier.requireConfig": true,
+    "prettier.useEditorConfig": false,
+
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.suggest.autoImports": true,
+
+    "files.associations": {
+        "*.ts": "typescript"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.retool_types/**": true,
+        "**/*tsconfig.json": true,
+        ".cache": true,
+        "retool.config.json": true
+    }
+}

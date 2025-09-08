@@ -50,11 +50,6 @@ declare module '@fastify/request-context' {
 }
 
 const getServer = async (): Promise<FastifyInstance> => {
-    /** Mount readiness & liveness probes */
-    server.get('/readinessCheck', (_req, res) => res.code(200).send())
-    server.get('/livenessCheck', (_req, res) => res.code(200).send())
-    server.get('/', (_req, res) => res.code(200).send())
-
     await server.register(helmet) // secure app by setting various HTTP headers
     await server.register(cors, {
         origin: '*',

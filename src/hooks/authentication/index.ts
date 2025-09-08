@@ -19,7 +19,7 @@ export const authToken = async (req: FastifyRequest<{ Body: never; Params: never
         if (!userPayload) throw WezardError.fromDef(APIErrors.InvalidToken)
 
         req.user = userPayload
-    } catch (error) {
+    } catch (_error) {
         throw WezardError.fromDef(APIErrors.InvalidToken)
     }
 }

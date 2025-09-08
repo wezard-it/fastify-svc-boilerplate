@@ -19,8 +19,22 @@ export type Config = {
         googleProjectId?: string
         googleStorageBucket?: string
     }
+    firebase: {
+        projectId?: string
+        privateKeyId?: string
+        privateKey?: string
+        clientEmail?: string
+        clientId?: string
+    }
     email: {
         defaultSender: string
+    }
+    sendgrid: {
+        sendgrid_key?: string
+    }
+    mailjet: {
+        mailjetApiKey?: string
+        mailjetApiSecret?: string
     }
 }
 
@@ -39,13 +53,21 @@ const envSchema = joi
         SERVER_URL: joi.string().required(),
         GOOGLE_PROJECT_ID: joi.string(),
         GOOGLE_STORAGE_BUCKET: joi.string(),
+        FIREBASE_PROJECT_ID: joi.string(),
+        FIREBASE_PRIVATE_KEY_ID: joi.string(),
+        FIREBASE_PRIVATE_KEY: joi.string(),
+        FIREBASE_CLIENT_EMAIL: joi.string(),
+        FIREBASE_CLIENT_ID: joi.string(),
+        SENDGRID_API_KEY: joi.string(),
+        MAILJET_API_KEY: joi.string(),
+        MAILJET_API_SECRET: joi.string(),
         EMAIL_DEFAULT_SENDER: joi.string().required()
     })
     .unknown()
     .required()
 
 // validate envVars with joi
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 const { error, value: envVars } = envSchema.validate(process.env)
 
 // catch any config error
@@ -69,7 +91,21 @@ const config: Config = {
     },
     google: {
         googleProjectId: envVars.GOOGLE_PROJECT_ID,
-        googleStorageBucket: envVars.GOOGLE_PROJECT_BUCKET
+        googleStorageBucket: envVars.GOOGLE_STORAGE_BUCKET
+    },
+    firebase: {
+        projectId: envVars.FIREBASE_PROJECT_ID,
+        privateKeyId: envVars.FIREBASE_PRIVATE_KEY_ID,
+        privateKey: envVars.FIREBASE_PRIVATE_KEY,
+        clientEmail: envVars.FIREBASE_CLIENT_EMAIL,
+        clientId: envVars.FIREBASE_CLIENT_ID
+    },
+    sendgrid: {
+        sendgrid_key: envVars.SENDGRID_API_KEY
+    },
+    mailjet: {
+        mailjetApiKey: envVars.MAILJET_API_KEY,
+        mailjetApiSecret: envVars.MAILJET_API_SECRET
     }
 }
 
