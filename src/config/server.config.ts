@@ -38,6 +38,11 @@ export type Config = {
         mailjetApiKey?: string
         mailjetApiSecret?: string
     }
+    supabase: {
+        supabaseUrl: string
+        supabaseAnonKey: string
+        supabaseServiceRoleKey: string
+    }
 }
 
 // define validation for all the env variables
@@ -63,7 +68,10 @@ const envSchema = joi
         SENDGRID_API_KEY: joi.string(),
         MAILJET_API_KEY: joi.string(),
         MAILJET_API_SECRET: joi.string(),
-        EMAIL_DEFAULT_SENDER: joi.string().required()
+        EMAIL_DEFAULT_SENDER: joi.string().required(),
+        SUPABASE_URL: joi.string(),
+        SUPABASE_ANON_KEY: joi.string(),
+        SUPABASE_SERVICE_ROLE_KEY: joi.string()
     })
     .unknown()
     .required()
@@ -110,6 +118,11 @@ const config: Config = {
     mailjet: {
         mailjetApiKey: envVars.MAILJET_API_KEY,
         mailjetApiSecret: envVars.MAILJET_API_SECRET
+    },
+    supabase: {
+        supabaseUrl: envVars.SUPABASE_URL,
+        supabaseAnonKey: envVars.SUPABASE_ANON_KEY,
+        supabaseServiceRoleKey: envVars.SUPABASE_SERVICE_ROLE_KEY
     }
 }
 

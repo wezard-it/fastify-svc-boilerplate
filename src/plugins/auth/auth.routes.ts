@@ -1,8 +1,8 @@
 import { type FastifyPluginCallback } from 'fastify'
 import authController from './auth.controller'
-import { RegisterBodySchema } from './auth.validation'
+import { RegisterBodySchema, RegisterResponseSchema } from './auth.validation'
 import { authToken } from '../../hooks/authentication'
-import { generateSchemaValidation } from '../response.validation'
+import { generateSchema, generateResponseSchema } from '../response.validation'
 
 const tag = 'Auth'
 const authRoutes: FastifyPluginCallback = (fastify, _opts, done) => {
@@ -12,7 +12,10 @@ const authRoutes: FastifyPluginCallback = (fastify, _opts, done) => {
             preHandler: [authToken],
             schema: {
                 tags: [tag],
-                body: generateSchemaValidation(RegisterBodySchema),
+                body: generateSchema(RegisterBodySchema),
+                response: {
+                    200: generateResponseSchema(RegisterResponseSchema)
+                },
                 summary: 'Register a new user'
             }
         },

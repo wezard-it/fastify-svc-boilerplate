@@ -15,11 +15,17 @@
     "commit": "npx git-cz",
     "prepare": "husky install",
     "test": "jest -i",
-    "bruno:import": "bru import openapi --source ./src/docs/openapi.json --output ./bruno --collection-name \"boilerplate API\"",
-    "plugin:generate": "node wezard-scripts/plugin-generator/index.js",
-    "schema:generate": "node wezard-scripts/schema-generator/index.js",
     "prisma:generate": "prisma generate",
-    "database:seed": "node wezard-scripts/seed-database/index.js"
+    "bruno:generate": "bru import openapi --source ./src/docs/openapi.json --output ./bruno --collection-name \"boilerplate API\"",
+    "test:all": "dotenv -e .env.test -- jest -i",
+    "test:integration": "dotenv -e .env.test -- jest -i tests/integration/*.test.ts",
+    "test:unit": "dotenv -e .env.test -- jest -i tests/unit/*.test.ts",
+    "test:auth:clean": "dotenv -e .env.test -- ts-node tests/auth.seeders.ts",
+    "test:db:up": "docker compose -f ./tests/docker-compose.test.yml up -d",
+    "test:db:down": "docker compose -f ./tests/docker-compose.test.yml down",
+    "test:setup": "yarn test:db:up && sleep 3 && dotenv -e .env.test -- npx prisma migrate deploy",
+    "test:reset": "yarn test:auth:clean && yarn test:db:down && yarn test:setup",
+    "test:teardown": "yarn test:db:down"
   },
   "keywords": [
     "wezard-svc"
@@ -74,6 +80,7 @@
     "@logtail/winston": "^0.5.6",
     "@prisma/client": "^6.15.0",
     "@sendgrid/mail": "^8.1.5",
+    "@supabase/supabase-js": "^2.98.0",
     "@types/jest": "^30.0.0",
     "ajv": "^8.17.1",
     "axios": "^1.11.0",

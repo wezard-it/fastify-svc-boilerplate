@@ -1,5 +1,4 @@
 import z from 'zod'
-import { ResponseSchema } from '../response.validation'
 
 export const RegisterBodySchema = z.object({
     email: z.string(),
@@ -9,6 +8,5 @@ export const RegisterBodySchema = z.object({
 })
 export type RegisterBody = z.infer<typeof RegisterBodySchema>
 
-export const RegisterResponseSchema = ResponseSchema.extend({
-    data: z.object({})
-})
+export const RegisterResponseSchema = z.object({})
+export type RegisterResponse = z.infer<typeof RegisterResponseSchema>

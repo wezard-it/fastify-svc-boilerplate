@@ -1,6 +1,6 @@
 import { type FastifyPluginCallback } from 'fastify'
 import usersController from './users.controller'
-import { generateSchemaValidation } from '../response.validation'
+import { generateSchema } from '../response.validation'
 import { GetUserParamsSchema } from './users.validation'
 
 const tag = 'User'
@@ -11,7 +11,7 @@ const userRoutes: FastifyPluginCallback = (fastify, _opts, done) => {
         {
             schema: {
                 tags: [tag],
-                params: generateSchemaValidation(GetUserParamsSchema),
+                params: generateSchema(GetUserParamsSchema),
                 summary: 'Get user by ID'
             },
             preParsing: []

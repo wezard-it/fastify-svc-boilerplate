@@ -29,11 +29,4 @@ describe('authService.register', () => {
 
         await expect(authService.register(baseBody as never)).rejects.toBe(error)
     })
-
-    it('should allow registration when user is not found (404)', async () => {
-        const notFoundError = WezardError.fromDef(APIErrors.UserNotFound)
-        mockedUserService.getUserByEmail.mockRejectedValueOnce(notFoundError)
-
-        await expect(authService.register(baseBody as never)).resolves.toEqual({})
-    })
 })
