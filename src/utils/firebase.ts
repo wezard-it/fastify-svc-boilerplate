@@ -34,6 +34,6 @@ const initializeFirebase = () => {
 }
 
 initializeFirebase()
-
+console.log('Firebase initialized')
 export const auth = admin.auth()
 export default admin
