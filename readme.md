@@ -213,61 +213,144 @@ This flag is primarily used during the initial deployment to avoid failures when
 
 In the Terraform code, you can find this variable being checked and used to determine which Docker image to use for the Cloud Run service.
 
----
+## Bruno APIs
 
-### Bruno API
+### Implementation
 
-This project uses **Bruno**, an open-source, offline-first and git-friendly API client that stores collections directly in the repository. This enables easy versioning, collaboration, and automated API testing workflows.
+The Bruno collections are stored under the `bruno` folder and mirror the example Fastify plugins:
 
-API requests and tests are defined as versioned files, allowing:
+- `bruno/Auth/*.bru` calls the `Auth` routes (for example the `/register` endpoint).
+- `bruno/User/*.bru` calls the `User` routes (for example the `GET /users/:userId` endpoint).
+- `bruno/Health/*.bru` and `bruno/Docs/*.bru` target the health check and OpenAPI documentation routes.
+- `bruno/environments/local.bru` defines shared variables such as `baseUrl`, `apiVersion` and `token`.
 
-- fast endpoint testing
-- automated response validation
-- seamless integration with Git workflows and CI/CD pipelines
+The collection is generated from the OpenAPI document using the `yarn bruno:generate` script, keeping the requests in sync with the documented API.
 
----
+### How to use
 
-### Installation
-
-Install the Bruno CLI:
-
-```
-npm install -g @usebruno/cli
-```
-
----
-
-### Generate API collection from OpenAPI
-
-```
-bru import openapi \
-  --source openapi.yaml \
-  --output ./bruno \
-  --collection-name "API"
-```
-
-or using the project script:
-
-```
-yarn bruno:import
-```
+1. Install the Bruno CLI and make sure the service is running locally.
+2. Edit `bruno/environments/local.bru` if needed to point `baseUrl` to your local URL and set `token` when testing authenticated routes.
+3. Open the `bruno` folder in the Bruno app, or run requests from the CLI, for example:
+    - Run all checks against the local environment from inside the `bruno` directory:
+        - `bru run --env local`
+    - Run or tweak the single `Auth` / `User` requests to manually exercise the example endpoints.
 
 ---
 
-### Environments
+## Tests
 
-Define environment variables inside:
+### Implementation
 
-```
-environments/local.bru
-```
+The test suite is built with Jest and split into unit and integration layers:
+
+- **Unit tests** live under `tests/unit`:
+    - `auth.service.test.ts` covers `authService.register`, mocking `users.service`.
+    - `users.service.test.ts` covers `usersService` while mocking the underlying repository.
+- **Integration tests** live under `tests/integration` and are meant to exercise Fastify endpoints end‑to‑end (see `example.test.ts` as a template).
+- Shared test utilities and seeders (for example `tests/auth.seeders.ts`) are used to prepare and clean the database for auth‑related scenarios.
+
+The following scripts are available in `package.json`:
+
+- `yarn test:unit` runs only the unit tests.
+- `yarn test:integration` runs only the integration tests.
+- `yarn test:all` runs the full suite with the `.env.test` configuration.
+
+### How to use
+
+1. Ensure the test database is up and migrated (see the **Mock DB** section below, or run `yarn test:setup`).
+2. Run unit tests during development:
+    - `yarn test:unit`
+3. Run integration tests when you need to verify the example HTTP endpoints:
+    - `yarn test:integration`
+4. Before pushing, run the full suite locally with:
+    - `yarn test:all`
 
 ---
 
-### Run API checks
+## Mock DB
 
-To execute the liveness check for all APIs, run inside the `bruno` directory:
+### Implementation
 
-```
-bru run --env local
-```
+Tests use an isolated PostgreSQL instance defined in `tests/docker-compose.test.yml`:
+
+- Spins up a `postgres:16-alpine` container on port `5433` with an in‑memory data directory (`tmpfs`), so test data is ephemeral.
+- Applies a health check (`pg_isready`) to ensure the database is ready before tests run.
+- Enables the `pgcrypto` extension through the container command.
+
+The test database lifecycle is orchestrated by scripts in `package.json`:
+
+- `yarn test:db:up` starts the database container.
+- `yarn test:db:down` stops and removes it.
+- `yarn test:setup` brings the DB up and applies Prisma migrations against it.
+- `yarn test:reset` cleans auth data, recreates the database and reruns migrations.
+- `yarn test:teardown` stops the database container.
+
+### How to use
+
+1. Start the test database and run migrations:
+    - `yarn test:setup`
+2. Run whichever test command you need (`yarn test:unit`, `yarn test:integration`, or `yarn test:all`).
+3. When you are done testing, stop the database:
+    - `yarn test:teardown`
+
+The `.env.test` file defines the connection string used by Prisma and the application when running the test scripts.
+
+---
+
+## Zod validation
+
+### Implementation
+
+Request and response validation are implemented with Zod schemas co‑located with each plugin:
+
+- `src/plugins/auth/auth.validation.ts` defines `RegisterBodySchema` and `RegisterResponseSchema`.
+- `src/plugins/users/users.validation.ts` defines `GetUserParamsSchema` and `CreateUserBodySchema`.
+- `src/plugins/response.validation.ts` exports:
+    - `ResponseSchema` and a generic `Response<T>` type.
+    - `generateSchema` to convert a Zod schema to a JSON Schema used by Fastify for validation and OpenAPI generation.
+    - `generateResponseSchema` to wrap a payload schema inside the standard `status` / `code` / `data` shape.
+
+The route handlers plug these schemas into Fastify:
+
+- `auth.routes.ts` uses `generateSchema(RegisterBodySchema)` for the request body and `generateResponseSchema(RegisterResponseSchema)` for the `200` response.
+- `users.routes.ts` uses `generateSchema(GetUserParamsSchema)` for URL params.
+
+This ensures strong runtime validation while keeping TypeScript types in sync via `z.infer<...>`.
+
+### How to use
+
+When adding a new route:
+
+1. Create or extend a `*.validation.ts` file in the relevant plugin folder with your Zod schemas for params, body, query and/or response.
+2. Export TypeScript types with `z.infer<typeof YourSchema>` so services and controllers can use strongly‑typed data.
+3. In the corresponding `.routes.ts` file:
+    - Import the schema(s).
+    - Wrap them with `generateSchema` / `generateResponseSchema` and attach them to the Fastify `schema` field.
+4. Regenerate or inspect the OpenAPI documentation to verify the new schemas are correctly applied.
+
+---
+
+## CI/CD
+
+### Implementation
+
+The CI pipeline is defined in `.github/workflows/test.yml` and runs on every push, pull request, and on manual trigger:
+
+- Provisions a `postgres:16-alpine` service on port `5433`, mirroring the local test DB setup.
+- Loads the `.env.test` file into the GitHub Actions environment.
+- Installs dependencies with `yarn install --frozen-lockfile`.
+- Generates the Prisma client with `yarn prisma:generate` and applies migrations with `yarn prisma migrate deploy`.
+- Cleans auth test data with `yarn test:auth:clean`.
+- Runs static checks (`yarn typecheck` and `yarn lint`).
+- Executes the full test suite with `yarn test:all`.
+
+### How to use
+
+- **On pushes and pull requests**: the workflow runs automatically and will fail the check if type checking, linting, or tests fail.
+- **Manual runs**: from the GitHub Actions tab, trigger the “Units and integrations tests” workflow via `workflow_dispatch` to re‑run the pipeline on any branch.
+- To reproduce the same steps locally, run the commands in the same order:
+    - `yarn test:setup`
+    - `yarn test:auth:clean`
+    - `yarn typecheck`
+    - `yarn lint`
+    - `yarn test:all`
