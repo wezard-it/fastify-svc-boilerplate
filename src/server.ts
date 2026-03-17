@@ -71,12 +71,9 @@ const getServer = async (): Promise<FastifyInstance> => {
         }
     })
 
-    const dirname = __dirname
-    const openapiPath = path.join(dirname, 'docs', 'openapi.json')
-    if (!fs.existsSync(path.join(dirname, 'docs'))) {
-        const sourcePath = dirname.split('/dist')
-        fs.cpSync(sourcePath[0] + sourcePath[1], dirname, { recursive: true })
-    }
+    const docsRootCandidates = [path.join(process.cwd(), 'src', 'docs'), path.join(__dirname, 'docs')]
+    const docsRoot = docsRootCandidates.find((p) => fs.existsSync(p)) ?? docsRootCandidates[0]
+    const openapiPath = path.join(docsRoot, 'openapi.json')
 
     server.get(
         '/docs/openapi.json',
@@ -97,7 +94,7 @@ const getServer = async (): Promise<FastifyInstance> => {
             await adminToken(req as never)
         })
         await server.register(fastifyStatic, {
-            root: path.join(dirname, 'docs'),
+            root: docsRoot,
             prefix: '/docs',
             index: 'index.html'
         })

@@ -34,11 +34,17 @@ const main = async () => {
         })
 
         await server.ready()
-        const spec = server.swagger()
 
-        const dirname = __dirname
-        const openapiPath = path.join(dirname, 'src', 'docs', 'openapi.json')
-        fs.writeFileSync(openapiPath, JSON.stringify(spec, null, 2))
+        if (config.env === 'development' || config.env === 'test') {
+            try {
+                const spec = server.swagger()
+                const openapiPath = path.join(process.cwd(), 'src', 'docs', 'openapi.json')
+                fs.mkdirSync(path.dirname(openapiPath), { recursive: true })
+                fs.writeFileSync(openapiPath, JSON.stringify(spec, null, 2))
+            } catch (err: unknown) {
+                logger.warn('Could not write OpenAPI spec file', { error: err })
+            }
+        }
 
         await server.listen({ port: config.port, host: '0.0.0.0' })
 
