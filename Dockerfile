@@ -1,29 +1,41 @@
-# Use the official Node.js 20 image as the base image
-FROM node:20
+# Stage 1: Builder
+FROM node:22-alpine AS builder
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and yarn.lock to the working directory
-COPY package*.json ./
-COPY ./yarn.lock ./
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Copy the rest of the application code to the working directory
-COPY ./src ./src
-COPY ./wezard-scripts ./wezard-scripts
-COPY ./tsconfig.json ./
-COPY ./index.ts ./
-COPY ./prisma ./prisma
-# COPY ./.env ./
+COPY src ./src
+COPY tsconfig.json ./
+COPY index.ts ./
+COPY prisma ./prisma
 
-# Install the application's dependencies
-RUN yarn install
 RUN yarn run prisma:generate
-RUN yarn run schema:generate
 RUN yarn run build
 
-# Expose the port on which the application will run
+# Stage 2: Runtime
+FROM node:22-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --production && yarn cache clean
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
 EXPOSE 3000
 
-# Start the application
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/v1/health || exit 1
+
 CMD [ "yarn", "start" ]
+
