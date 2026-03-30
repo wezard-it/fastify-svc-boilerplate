@@ -1,0 +1,11 @@
+meta {
+  name: Get OpenAPI specification in JSON format
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/docs/openapi.json
+  body: none
+  auth: inherit
+}

@@ -1,7 +1,7 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import userService from './users.service'
 import WezardError from '../../utils/WezardError'
-import { GetUserParams } from './users.types'
+import { GetUserParams } from './users.validation'
 
 const NA = undefined
 

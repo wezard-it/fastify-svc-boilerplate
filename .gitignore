@@ -5,7 +5,7 @@
 /tmp
 /dist
 /dev
-
+/coverage
 
 # Local .terraform directories
 **/.terraform/*

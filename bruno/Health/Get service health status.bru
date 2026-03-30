@@ -1,0 +1,11 @@
+meta {
+  name: Get service health status
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/1/health
+  body: none
+  auth: inherit
+}

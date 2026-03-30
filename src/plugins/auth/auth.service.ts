@@ -1,4 +1,4 @@
-import type { RegisterBody } from './auth.types'
+import type { RegisterBody } from './auth.validation'
 import userService from '../users/users.service'
 import logger from '../../utils/logger'
 import WezardError from '../../utils/WezardError'

@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
 import db from '../../utils/db'
-import type { CreateUserBody } from './users.types'
+import type { CreateUserBody } from './users.validation'
 
 async function store(user: CreateUserBody): Promise<User> {
     return db.user.create({

@@ -1,0 +1,19 @@
+services:
+    postgres-test:
+        image: postgres:16-alpine
+        container_name: arianna2002-test-db
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: test_password
+            POSTGRES_DB: postgres
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+            - '5433:5432'
+        tmpfs:
+            - /var/lib/postgresql/data:rw,noexec,nosuid,size=512m
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U postgres']
+            interval: 2s
+            timeout: 5s
+            retries: 10
+        command: postgres -c shared_preload_libraries=pgcrypto

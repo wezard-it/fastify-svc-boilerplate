@@ -1,6 +1,6 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import authService from './auth.service'
-import type { RegisterBody } from './auth.types'
+import type { RegisterBody } from './auth.validation'
 import WezardError from '../../utils/WezardError'
 
 const NA = undefined

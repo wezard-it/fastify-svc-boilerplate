@@ -5,6 +5,8 @@ import logger from './src/utils/logger'
 import getServer from './src/server'
 import WezardError from './src/utils/WezardError'
 import db from './src/utils/db'
+import fs from 'fs'
+import path from 'path'
 
 const main = async () => {
     try {
@@ -30,6 +32,19 @@ const main = async () => {
                 }
             ]
         })
+
+        await server.ready()
+
+        if (config.env === 'development' || config.env === 'test') {
+            try {
+                const spec = server.swagger()
+                const openapiPath = path.join(process.cwd(), 'src', 'docs', 'openapi.json')
+                fs.mkdirSync(path.dirname(openapiPath), { recursive: true })
+                fs.writeFileSync(openapiPath, JSON.stringify(spec, null, 2))
+            } catch (err: unknown) {
+                logger.warn('Could not write OpenAPI spec file', { error: err })
+            }
+        }
 
         await server.listen({ port: config.port, host: '0.0.0.0' })
 

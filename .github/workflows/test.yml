@@ -1,0 +1,63 @@
+name: Units and integrations tests
+
+on:
+    push:
+        branches: ['**']
+    pull_request:
+        branches: ['**']
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:16-alpine
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: test_password
+                    POSTGRES_DB: postgres
+                    POSTGRES_HOST_AUTH_METHOD: trust
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 2s
+                    --health-timeout 5s
+                    --health-retries 10
+                ports:
+                    - 5433:5432
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Load .env.test into environment
+              run: |
+                  sed -E '/^\s*($|#)/d' .env.test >> "$GITHUB_ENV"
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'yarn'
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Generate Prisma Client
+              run: yarn prisma:generate
+
+            - name: Run database migrations
+              run: yarn prisma migrate deploy
+
+            - name: Clean auth tests
+              run: yarn test:auth:clean
+
+            - name: Run type check
+              run: yarn typecheck
+
+            - name: Run linter
+              run: yarn lint
+
+            - name: Run tests
+              run: yarn test:all

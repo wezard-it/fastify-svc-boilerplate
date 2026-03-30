@@ -1,6 +1,7 @@
 import { FastifyRequest } from 'fastify'
 import { APIErrors } from '../../utils/consts'
 import WezardError from '../../utils/WezardError'
+import config from '../../config/server.config'
 
 import verifyFirebaseToken from './firebase-auth'
 
@@ -22,4 +23,11 @@ export const authToken = async (req: FastifyRequest<{ Body: never; Params: never
     } catch (_error) {
         throw WezardError.fromDef(APIErrors.InvalidToken)
     }
+}
+
+export const adminToken = async (req: FastifyRequest<{ Body: never; Params: never; Querystring: never }>) => {
+    const xApiKey = req.headers['x-api-key'] as string | undefined
+
+    if (!xApiKey || xApiKey !== config.adminApiKey) throw WezardError.fromDef(APIErrors.MissingAuthentication)
+    req.admin = true
 }

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { CreateUserBody } from '../plugins/users/users.types'
+import { CreateUserBody } from '../plugins/users/users.validation'
 import db from '../utils/db'
 
 export async function seed(): Promise<void> {
@@ -7,7 +7,9 @@ export async function seed(): Promise<void> {
         name: faker.person.firstName(),
         surname: faker.person.lastName(),
         email: faker.internet.email(),
-        role: 'USER'
+        role: 'USER',
+        age: faker.number.int({ min: 18, max: 70 }),
+        eye_color: faker.color.rgb({ prefix: '' })
     }))
 
     await db.user.createMany({

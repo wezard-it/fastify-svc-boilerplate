@@ -15,9 +15,11 @@ export type Config = {
     fullResponse: boolean
     databaseUrl: string
     serverUrl: string
+    adminApiKey: string
     google: {
         googleProjectId?: string
         googleStorageBucket?: string
+        firebaseApiKey: string
     }
     firebase: {
         projectId?: string
@@ -35,6 +37,11 @@ export type Config = {
     mailjet: {
         mailjetApiKey?: string
         mailjetApiSecret?: string
+    }
+    supabase: {
+        supabaseUrl: string
+        supabaseAnonKey: string
+        supabaseServiceRoleKey: string
     }
 }
 
@@ -61,7 +68,10 @@ const envSchema = joi
         SENDGRID_API_KEY: joi.string(),
         MAILJET_API_KEY: joi.string(),
         MAILJET_API_SECRET: joi.string(),
-        EMAIL_DEFAULT_SENDER: joi.string().required()
+        EMAIL_DEFAULT_SENDER: joi.string().required(),
+        SUPABASE_URL: joi.string(),
+        SUPABASE_ANON_KEY: joi.string(),
+        SUPABASE_SERVICE_ROLE_KEY: joi.string()
     })
     .unknown()
     .required()
@@ -86,12 +96,14 @@ const config: Config = {
     fullResponse: envVars.FULL_RESPONSE,
     databaseUrl: envVars.DATABASE_URL,
     serverUrl: envVars.SERVER_URL,
+    adminApiKey: envVars.ADMIN_API_KEY,
     email: {
         defaultSender: envVars.EMAIL_DEFAULT_SENDER
     },
     google: {
         googleProjectId: envVars.GOOGLE_PROJECT_ID,
-        googleStorageBucket: envVars.GOOGLE_STORAGE_BUCKET
+        googleStorageBucket: envVars.GOOGLE_STORAGE_BUCKET,
+        firebaseApiKey: envVars.FIREBASE_API_KEY
     },
     firebase: {
         projectId: envVars.FIREBASE_PROJECT_ID,
@@ -106,6 +118,11 @@ const config: Config = {
     mailjet: {
         mailjetApiKey: envVars.MAILJET_API_KEY,
         mailjetApiSecret: envVars.MAILJET_API_SECRET
+    },
+    supabase: {
+        supabaseUrl: envVars.SUPABASE_URL,
+        supabaseAnonKey: envVars.SUPABASE_ANON_KEY,
+        supabaseServiceRoleKey: envVars.SUPABASE_SERVICE_ROLE_KEY
     }
 }
 
